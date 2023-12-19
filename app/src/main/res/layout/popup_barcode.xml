@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/button_gradient"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="MissingDefaultResource">
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+   >
+
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_centerHorizontal="true"
+        android:gravity="center|center_vertical|center_horizontal"
+        android:text="@string/popup_heading"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_below="@+id/heading"
+        android:id="@+id/barcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/barcodeno"
+            style="@style/ThemeOverlay.Material3.AutoCompleteTextView.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_18sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:elevation="@dimen/_5sdp"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="@dimen/_22sdp"
+            app:boxCornerRadiusBottomStart="@dimen/_22sdp"
+            app:boxCornerRadiusTopEnd="@dimen/_22sdp"
+            app:boxCornerRadiusTopStart="@dimen/_22sdp"
+            app:boxStrokeColor="@color/color_pri_v"
+            app:boxStrokeErrorColor="@color/primary_peach"
+            app:boxStrokeWidth="0.2dp"
+            app:endIconDrawable="@drawable/ic_close"
+            app:endIconMode="clear_text"
+            app:errorTextColor="@color/secondary_peach"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/terms"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/version"
+            app:layout_constraintVertical_bias="0.1">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/mobile_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/manual"
+                android:inputType="text"
+                android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:paddingVertical="@dimen/_11sdp"
+                android:textSize="@dimen/_12ssp"
+                android:imeOptions="actionDone"
+                tools:ignore="RtlSymmetry" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/primary_red"
+            android:layout_margin="@dimen/_5sdp"/>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_below="@+id/barcode"
+        android:layout_width="match_parent"
+        android:layout_height="@android:dimen/app_icon_size"
+        >
+
+        <LinearLayout
+            android:id="@+id/top_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+
+            android:baselineAligned="false"
+            tools:ignore="UselessParent">
+
+            <LinearLayout
+                android:id="@+id/lay_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/cancel"
+                    android:layout_marginStart="@dimen/_8ssp"
+                    android:layout_marginEnd="@dimen/_8ssp"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/lay_new"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:showDividers="end">
+
+                <Button
+                    android:id="@+id/saveBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/ok"
+                    android:layout_marginStart="@dimen/_8ssp"
+                    android:layout_marginEnd="@dimen/_8ssp"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+</RelativeLayout>
+

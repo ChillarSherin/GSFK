@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.chillarcards.gsfk.ui.home.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_scanFragment"
+            app:destination="@id/scanFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
+        <action
+            android:id="@+id/action_scanFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+      <argument
+            android:name="mobileNo"
+            android:defaultValue=""
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/scanFragment"
+        android:name="com.chillarcards.gsfk.ui.scan.ScanFragment"
+        android:label="ScanFragment"
+        tools:layout="@layout/fragment_scan">
+        <action
+            android:id="@+id/action_scanFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.chillarcards.gsfk.ui.scan.ScanResultFragment"
+        android:label="ScanResultFragment"
+        tools:layout="@layout/fragment_scan_result">
+
+        <argument
+            android:name="sannedCode"
+            android:defaultValue=""
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.chillarcards.gsfk.ui.report.ReportFragment"
+        android:label="ReportFragment"
+        tools:layout="@layout/fragment_report">
+    </fragment>
+</navigation>
