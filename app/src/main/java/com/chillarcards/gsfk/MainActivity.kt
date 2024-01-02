@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -16,6 +17,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import com.chillarcards.gsfk.databinding.ActivityMainBinding
 import com.chillarcards.gsfk.utills.ConnectivityReceiver
+import com.chillarcards.gsfk.utills.Const
+import com.chillarcards.gsfk.utills.Const.Companion.clearCache
 import com.chillarcards.gsfk.utills.PrefManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -29,6 +32,7 @@ class MainActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var prefManager: PrefManager
+    private val logoutHandler = Handler()
 
     private val  MY_REQUEST_CODE = 5
 
@@ -39,9 +43,25 @@ class MainActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
         }
     }
 
+//    private val logoutRunnable = Runnable {
+//        PrefManager(this).clearAll()
+//        clearCache(this)
+//        Const.logout(this,"Need to restart you GSFK Application")
+//
+//    }
+//    init {
+//        // Schedule logout after 9 hours
+////        scheduleTask(logoutHandler, logoutRunnable, 0.2 * 60 * 1000)
+//         scheduleTask(logoutHandler, logoutRunnable, 2 * 60 * 60 * 1000)
+//    }
+
+    private fun scheduleTask(handler: Handler, runnable: Runnable, delayMillis: Int) {
+        handler.postDelayed({
+            runnable.run()
+        }, delayMillis.toLong())
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
-     //   WindowCompat.setDecorFitsSystemWindows(window, false)
-        // Set the activity to be fullscreen.
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -68,7 +88,7 @@ class MainActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
         justLoggedIn = false
 
         val destination =
-            if (prefManager.isLoggedIn()) R.id.homeBaseFragment else R.id.mobileFragment
+            if (prefManager.isLoggedIn()) R.id.homeFragment else R.id.mobileFragment
         navGraph.setStartDestination(destination)
         navController.graph = navGraph
 
@@ -102,17 +122,14 @@ class MainActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
         ConnectivityReceiver.connectivityReceiverListener = this
 
         // TODO: check the time taken to execute the following and in case it is taking too long, run it in a separate thread
-        if (!isFinishing) {
-            if (justLoggedIn) {
-                val intent = Intent(this@MainActivity, MainActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
+//        if (!isFinishing) {
+//            if (justLoggedIn) {
+//                val intent = Intent(this@MainActivity, MainActivity::class.java)
+//                startActivity(intent)
+//            }
+//        }
         getUpdate()
-
     }
-
 
     private fun getUpdate(){
         val appUpdateManager = AppUpdateManagerFactory.create(this)
@@ -183,7 +200,6 @@ class MainActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
                 else -> {}
             }
         }
-
 // Unregister the listener when it's no longer needed
         appUpdateManager.unregisterListener(listener)
 

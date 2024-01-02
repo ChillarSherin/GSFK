@@ -1,6 +1,7 @@
 package com.chillarcards.gsfk.ui.register
 
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Typeface
@@ -16,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -24,6 +26,10 @@ import androidx.navigation.fragment.findNavController
 import com.chillarcards.gsfk.R
 import com.chillarcards.gsfk.databinding.FragmentMobileBinding
 import com.chillarcards.gsfk.utills.Const
+import com.chillarcards.gsfk.utills.PrefManager
+import com.chillarcards.gsfk.utills.Status
+import com.chillarcards.gsfk.viewmodel.MobileViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MobileFragment : Fragment() {
@@ -34,7 +40,8 @@ class MobileFragment : Fragment() {
     private val emailRegex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})".toRegex()
 
     private var statusTrue: Boolean = false
-    private var tempMobileNo: String = ""
+    private val mobileViewModel by viewModel<MobileViewModel>()
+    private lateinit var prefManager: PrefManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +57,7 @@ class MobileFragment : Fragment() {
         val pInfo =
             activity?.let { activity?.packageManager!!.getPackageInfo(it.packageName, PackageManager.GET_ACTIVITIES) }
         val versionName = pInfo?.versionName //Version Name
+        prefManager = PrefManager(requireContext())
 
         binding.version.text = "${getString(R.string.version)}" + Const.ver_title + versionName
 
@@ -64,7 +72,6 @@ class MobileFragment : Fragment() {
                     binding.mobile.error = null
                     binding.mobile.isErrorEnabled = false
                     Const.enableButton(binding.loginBtn)
-                    tempMobileNo = input
                     val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view.windowToken, 0)
                 }
@@ -74,53 +81,89 @@ class MobileFragment : Fragment() {
             }
         }
 
-        setUpObserver()
+        binding.passwordEt.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+            false
+        }
 
-
-//        binding.terms.setOnClickListener {
-//            binding.terms.isChecked = false
-//            findNavController().navigate(MobileFragmentDirections.actionMobileFragmentToPrivacyPolicyFragment(statusTrue,tempMobileNo))
-//        }
 
         binding.loginBtn.setOnClickListener {
-            val input = binding.mobileEt.text.toString()
-            when {
-                !mobileRegex.containsMatchIn(input) -> {
-                    binding.mobile.error = getString(R.string.mob_validation)
-                }
-                else -> {
-                    try {
-                        findNavController().navigate(
-                            MobileFragmentDirections.actionMobileFragmentToHomeFragment()
-                        )
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
+            val mobileInput = binding.mobileEt.text.toString()
+            val passwordInput = binding.passwordEt.text.toString()
+
+            if (!mobileRegex.containsMatchIn(mobileInput)) {
+                binding.mobile.error = getString(R.string.mob_validation)
+            } else if (passwordInput.isEmpty()) {
+                binding.passwordEt.error = getString(R.string.password_empty_error)
+            } else {
+                binding.mobile.error = null
+                binding.passwordEt.error = null
+
+                mobileViewModel.mobileNumber.value = mobileInput
+                mobileViewModel.password.value = passwordInput
+                mobileViewModel.getMobileResponse()
             }
         }
 
+        setUpObserver()
         setTextColorForTerms()
     }
 
 
-    fun onLoadSMS(){
-        // on the below line we are creating a try and catch block
-        try {
-
-            val message ="123456 is your verification OTP for accessing the KR COIN wallet. Do not share this OTP or your number with anyone.yaMqX9A+vNH"
-            val uri: Uri = Uri.parse("smsto:+919744496378")
-            val intent = Intent(Intent.ACTION_SENDTO, uri)
-            intent.putExtra("sms_body", message)
-            startActivity(intent)
-
-        } catch (e: Exception) {
-            // on catch block we are displaying toast message for error.
-        }
-    }
-
     private fun setUpObserver() {
+        try {
+            mobileViewModel.mobileData.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    when (it.status) {
+                        Status.SUCCESS -> {
+                            hideProgress()
+                            it.data?.let { mobileData ->
+                                when (mobileData.status.code) {
+                                    "200" -> {
+                                        prefManager.setToken(mobileData.data.userToken ?: "")
+                                        prefManager.setMobileNo(mobileData.data.userPhone)
+                                        prefManager.setIsLoggedIn(true)
 
+                                        findNavController().navigate(
+                                            MobileFragmentDirections.actionMobileFragmentToHomeFragment()
+                                        )
+
+                                        // TODO: Check effects of the following code
+                                        mobileViewModel.mobileData.removeObservers(viewLifecycleOwner)
+                                    }
+                                    "500" -> {
+                                        Const.shortToast(
+                                            requireContext(),
+                                            mobileData.status.message.toString()
+                                        )
+                                    }
+                                    else -> {
+                                        mobileData.status.message?.let { it1 ->
+                                            Const.shortToast(
+                                                requireContext(),
+                                                it1
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        Status.LOADING -> {
+                            showProgress()
+                        }
+                        Status.ERROR -> {
+                            hideProgress()
+                            Const.shortToast(requireContext(), it.message.toString())
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("abc_mobile", "setUpObserver: ", e)
+        }
     }
 
     private fun showProgress() {
@@ -142,7 +185,7 @@ class MobileFragment : Fragment() {
                     val browserIntent =
                         Intent(
                             Intent.ACTION_VIEW,
-                            Uri.parse("https://www.chillarpayments.com/terms-and-conditions.html")
+                            Uri.parse("https://www.gsfk.org/privacy-policy/")
                         )
                     startActivity(browserIntent)
 
@@ -175,7 +218,10 @@ class MobileFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         Log.d("abc_mob", "onStop: ")
-       // mobileViewModel.clear()
+        binding.passwordEt.setText("")
+        binding.mobileEt.setText("")
+
+        mobileViewModel.clear()
     }
 
     override fun onDestroy() {

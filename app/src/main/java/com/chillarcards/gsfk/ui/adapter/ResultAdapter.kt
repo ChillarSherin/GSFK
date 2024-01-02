@@ -5,17 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.chillarcards.gsfk.R
+import com.chillarcards.gsfk.data.model.RpData
 import com.chillarcards.gsfk.interfaces.IAdapterViewUtills
-import com.chillarcards.gsfk.ui.Dummy
 import com.chillarcards.gsfk.utills.CommonDBaseModel
+
 class ResultAdapter(
-    private val items: List<Dummy>,
+    private val items: List<RpData>,
     private val context: Context?,
     private val getAdapterUtil: IAdapterViewUtills
 ) : RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
@@ -39,18 +39,15 @@ class ResultAdapter(
                 notifyDataSetChanged()
 
                 val commonDObj = CommonDBaseModel()
-                commonDObj.mastIDs = item.id.toString()
-                commonDObj.itmName = item.name
-                commonDObj.valueStr1 = item.custname
+                commonDObj.mastIDs = item.event_transaction_item_id.toString()
+                commonDObj.itmName = item.sub_package_name
+                commonDObj.valueStr1 = item.sub_package_count
                 val sCommonDAry: ArrayList<CommonDBaseModel> = ArrayList()
                 sCommonDAry.add(commonDObj)
                 getAdapterUtil.getAdapterPosition(position, sCommonDAry, "CheckIn")
             }
         }
 
-        holder.BookingView.setOnClickListener {
-
-        }
     }
 
     override fun getItemCount() = items.size
@@ -62,10 +59,10 @@ class ResultAdapter(
         val PayStatus: ImageView = itemView.findViewById(R.id.report_status)
         val checkBox: CheckBox = itemView.findViewById(R.id.checkbox)
 
-        fun bind(item: Dummy) {
-            CustomNameTextView.text = item.custname
-            GuestCount.text = item.name
-            if (item.id == 1) {
+        fun bind(item: RpData) {
+            CustomNameTextView.text = item.sub_package_name
+            GuestCount.text = item.sub_package_count
+            if (item.event_transaction_item_status.toInt() == 1) {
                 PayStatus.visibility = View.VISIBLE
                 checkBox.visibility = View.GONE
             }

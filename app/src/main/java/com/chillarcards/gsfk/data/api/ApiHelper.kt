@@ -1,6 +1,5 @@
 package com.chillarcards.gsfk.data.api
 
-import com.chillarcards.gsfk.data.model.OTPModel
 import com.chillarcards.gsfk.data.model.*
 import retrofit2.Response
 
@@ -10,18 +9,24 @@ import retrofit2.Response
  * Chillar
  */
 interface ApiHelper {
-
-    suspend fun sendOTP(
+    suspend fun getMobile(
         mobileNumber: String,
-        userID: String,
-        token: String
-    ): Response<OTPModel>
+        password: String
+    ): Response<MobileModel>
 
-    suspend fun verifyOTP(
+    suspend fun getQrScan(
         mobileNumber: String,
-        otp: String,
-        userID: String,
-        token: String
-    ): Response<OTPModel>
-
+        token: String,
+        qrCode: String
+    ): Response<ScanModel>
+    suspend fun getEventScan(
+        mobileNumber: String,
+        token: String,
+        eventId: List<String>
+    ): Response<UpdateModel>
+    suspend fun getReport(
+        mobileNumber: String,
+        token: String,
+        date: String
+    ): Response<ReportModel>
 }

@@ -37,7 +37,7 @@
                 <ImageView
                     android:id="@+id/logo_icon"
                     android:layout_width="@dimen/_150sdp"
-                    android:layout_height="@dimen/_80sdp"
+                    android:layout_height="@dimen/_85sdp"
                     android:src="@drawable/gsfk_logo" />
             </LinearLayout>
             <LinearLayout
@@ -128,10 +128,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text=" 4 "
+                            android:text="  "
                             android:textStyle="bold"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_18ssp" />
+                            android:textSize="@dimen/_20ssp" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -166,7 +166,6 @@
                             app:lottie_rawRes="@raw/ic_scan"
                             android:layout_gravity="center_horizontal"/>
 
-
                         <TextView
                             android:id="@+id/scan_txt"
                             android:layout_width="match_parent"
@@ -190,7 +189,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_11sdp"
-
                     android:layout_marginStart="@dimen/_9sdp"
                     android:layout_marginBottom="@dimen/_75sdp"
                     app:cardBackgroundColor="@color/secondary_green"
@@ -206,12 +204,16 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal">
 
                         <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/report_img"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="@dimen/_80sdp"
+                            android:padding="@dimen/_15sdp"
+                            android:gravity="center"
                             app:lottie_autoPlay="true"
                             app:lottie_loop="true"
                             app:lottie_rawRes="@raw/ic_report_menu"

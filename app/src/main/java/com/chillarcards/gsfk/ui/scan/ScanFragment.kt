@@ -30,6 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.budiyev.android.codescanner.*
 import com.chillarcards.gsfk.MainActivity
 import com.chillarcards.gsfk.R
@@ -44,6 +45,7 @@ class ScanFragment : Fragment() {
 
     lateinit var binding: FragmentScanBinding
     private lateinit var codeScanner: CodeScanner
+    private val args: ScanFragmentArgs by navArgs()
 
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId: Int = 101
@@ -137,15 +139,16 @@ class ScanFragment : Fragment() {
 
     private fun onScannedComplete(scannedValue: String) {
         Log.d("abc_scan", "onScannedComplete: $scannedValue")
+
         // TODO: do validations for scanned value if necessary
         try {
             findNavController().navigate(
-                ScanFragmentDirections.actionScanFragmentToResultFragment(scannedValue))
+                ScanFragmentDirections.actionScanFragmentToResultFragment(
+                    prefManager.getMobileNo(),prefManager.getToken(),scannedValue))
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
-
 
     @SuppressLint("MissingPermission")
     private val requestPermissionLauncher =
@@ -331,4 +334,6 @@ class ScanFragment : Fragment() {
         }
     }
     //END LAT AND LONG
+
+
 }

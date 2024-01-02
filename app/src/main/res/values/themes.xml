@@ -5,16 +5,15 @@
         <item name="colorPrimary">@color/primary_blue</item>
         <item name="colorPrimaryDark">@color/primary_blue</item>
         <item name="android:colorPrimaryDark">@color/app_theme</item>
-        <item name="android:navigationBarColor">@color/primary_blue</item>
         <item name="colorPrimaryVariant">@color/color_pri_v</item>
         <item name="colorOnPrimary">@color/primary_cyan</item>
         <item name="android:colorBackground">@color/app_theme</item>
         <item name="colorOnBackground">@color/color_pri_v</item>
         <item name="colorSecondary">@color/primary_red</item>
         <item name="colorSecondaryVariant">@color/primary_brown</item>
-        <item name="android:statusBarColor">@color/primary_blue</item>
         <item name="android:textColor">@color/white</item>
-
+        <item name="android:statusBarColor">@color/app_theme</item>
+        <item name="android:navigationBarColor">@color/app_theme</item>
     </style>
 
     <style name="SCBSwitch" parent="Theme.AppCompat.Light">
@@ -47,8 +46,8 @@
     <style name="Theme.MyApplication" parent="Base.Theme.MyApplication" />
 
     <style name="Theme.AppSplash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@drawable/bg_gradient</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_gsfk_launch</item>
+        <item name="windowSplashScreenBackground">#1E497F</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
         <item name="windowSplashScreenAnimationDuration">300</item>
         <item name="postSplashScreenTheme">@style/Theme.MyApplication</item>
 

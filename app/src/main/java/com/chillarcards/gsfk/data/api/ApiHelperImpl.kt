@@ -1,6 +1,5 @@
 package com.chillarcards.gsfk.data.api
 
-import com.chillarcards.gsfk.data.api.ApiHelper
 import com.chillarcards.gsfk.data.model.*
 import retrofit2.Response
 
@@ -10,23 +9,31 @@ import retrofit2.Response
  * Chillar
  */
 class ApiHelperImpl(private val apiService: ApiService) : ApiHelper {
-
-
-    override suspend fun sendOTP(
+    override suspend fun getMobile(
         mobileNumber: String,
-        userID: String,
-        token: String
-    ): Response<OTPModel> = apiService.sendOTP(
-        OTPRequestModel(mobileNumber, userID, token)
-    )
-
-    override suspend fun verifyOTP(
-        mobileNumber: String,
-        otp: String,
-        userID: String,
-        token: String
-    ): Response<OTPModel> {
-        TODO("Not yet implemented")
+        password: String
+    ): Response<MobileModel> {
+        return apiService.getMobile(mobileNumber,  password)
     }
-
+    override suspend fun getQrScan(
+        mobileNumber: String,
+        token: String,
+        qrCode: String
+    ): Response<ScanModel> {
+        return apiService.getQrScan(mobileNumber,  token,  qrCode)
+    }
+    override suspend fun getEventScan(
+        mobileNumber: String,
+        token: String,
+        eventId: List<String>
+    ): Response<UpdateModel> {
+        return apiService.getEventScan(mobileNumber,  token,  eventId)
+    }
+    override suspend fun getReport(
+        mobileNumber: String,
+        token: String,
+        date: String
+    ): Response<ReportModel> {
+        return apiService.getReport(mobileNumber,  token,  date)
+    }
 }

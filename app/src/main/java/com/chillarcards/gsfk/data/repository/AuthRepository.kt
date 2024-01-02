@@ -8,11 +8,13 @@ import com.chillarcards.gsfk.data.api.ApiHelper
  * Chillar
  */
 class AuthRepository(private val apiHelper: ApiHelper) {
-
-    suspend fun getOTP(mobileNumber: String, userID: String, token: String) =
-        apiHelper.sendOTP(mobileNumber, userID, token)
-
-    suspend fun verifyOTP(mobileNumber: String, otp: String, userID: String, token: String) =
-        apiHelper.verifyOTP(mobileNumber, otp, userID, token)
+    suspend fun getMobile(mobileNumber: String, password: String) =
+        apiHelper.getMobile(mobileNumber,password)
+    suspend fun getQrScan(mobileNumber: String, token: String, qrScan: String) =
+        apiHelper.getQrScan(mobileNumber,token,qrScan)
+    suspend fun getEventScan(mobileNumber: String, token: String, eventId: List<String>) =
+        apiHelper.getEventScan(mobileNumber,token,eventId)
+    suspend fun getReport(mobileNumber: String, token: String, date: String) =
+        apiHelper.getReport(mobileNumber,token,date)
 
 }

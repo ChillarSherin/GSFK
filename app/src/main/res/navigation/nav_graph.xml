@@ -11,88 +11,77 @@
         android:label="MobileFragment"
         tools:layout="@layout/fragment_mobile">
         <action
-            android:id="@+id/action_mobileFragment_to_OTPFragment"
-            app:destination="@id/OTPFragment" />
-        <action
             android:id="@+id/action_mobileFragment_to_HomeFragment"
-            app:destination="@id/homeBaseFragment" />
-        <argument
-            android:name="isVerifyTrm"
-            android:defaultValue="false"
-            app:argType="boolean" />
+            app:destination="@id/homeFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.chillarcards.gsfk.ui.home.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_scanFragment"
+            app:destination="@id/scanFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
+        <action
+            android:id="@+id/action_scanFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_mobileFrgment"
+            app:destination="@id/mobileFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/scanFragment"
+        android:name="com.chillarcards.gsfk.ui.scan.ScanFragment"
+        android:label="ScanFragment"
+        tools:layout="@layout/fragment_scan">
+        <action
+            android:id="@+id/action_scanFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
         <argument
             android:name="mobileNo"
             android:defaultValue=""
             app:argType="string"
             app:nullable="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/OTPFragment"
-        android:name="com.chillarcards.gsfk.ui.register.OTPFragment"
-        android:label="OTPFragment"
-        tools:layout="@layout/fragment_otp">
-        <action
-            android:id="@+id/action_OTPFragment_to_HomeFragment"
-            app:destination="@id/homeBaseFragment" />
-        <action
-            android:id="@+id/action_OTPFragment_to_RegFragment"
-            app:destination="@id/RegisterFragment" />
+
         <argument
-            android:name="mobile"
+            android:name="token"
             android:defaultValue=""
             app:argType="string"
             app:nullable="true" />
     </fragment>
     <fragment
-        android:id="@+id/RegisterFragment"
-        android:name="com.chillarcards.gsfk.ui.register.RegisterFragment"
-        android:label="RegisterFragment"
-        tools:layout="@layout/fragment_register" >
-        <action
-            android:id="@+id/action_RegisterFragment_to_bankFragment"
-            app:destination="@id/BankFragment" />
-        <action
-            android:id="@+id/action_RegisterFragment_to_mapFragment"
-            app:destination="@id/MapFragment" />
+        android:id="@+id/resultFragment"
+        android:name="com.chillarcards.gsfk.ui.scan.ScanResultFragment"
+        android:label="ScanResultFragment"
+        tools:layout="@layout/fragment_scan_result">
         <argument
-            android:name="mobile"
+            android:name="mobileNo"
             android:defaultValue=""
             app:argType="string"
             app:nullable="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/MapFragment"
-        android:name="com.chillarcards.gsfk.ui.register.MapsFragment"
-        android:label="MapsFragment"
-        tools:layout="@layout/fragment_maps">
-        <action
-            android:id="@+id/action_MapFragment_to_RegFragment"
-            app:destination="@id/RegisterFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/BankFragment"
-        android:name="com.chillarcards.gsfk.ui.register.BankFragment"
-        android:label="RegisterFragment"
-        tools:layout="@layout/fragment_bank">
-        <action
-        android:id="@+id/action_BankFragment_to_TimeFragment"
-        app:destination="@id/TimeFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/TimeFragment"
-        android:name="com.chillarcards.gsfk.ui.register.WorkHoursFragment"
-        android:label="WorkHoursFragment"
-        tools:layout="@layout/fragment_work_hours">
-        <action
-            android:id="@+id/action_TimeFragment_to_HomeFragment"
-            app:destination="@id/homeBaseFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/homeBaseFragment"
-        android:name="com.chillarcards.gsfk.ui.home.HomeBaseFragment"
-        android:label="HomeBaseFragment"
-        tools:layout="@layout/fragment_home_base" >
+        <argument
+            android:name="token"
+            android:defaultValue=""
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="sannedCode"
+            android:defaultValue=""
+            app:argType="string"
+            app:nullable="true" />
 
     </fragment>
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.chillarcards.gsfk.ui.report.ReportFragment"
+        android:label="ReportFragment"
+        tools:layout="@layout/fragment_report">
+    </fragment>
+
 </navigation>

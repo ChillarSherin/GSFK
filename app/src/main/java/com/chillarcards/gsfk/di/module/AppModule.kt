@@ -41,7 +41,7 @@ private fun provideOkHttpClient() = if (ConfigBuild.DEBUG) {
     loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
-        .addInterceptor(getHeaderInterceptor())
+//        .addInterceptor(getHeaderInterceptor())
         .protocols(listOf(Protocol.HTTP_1_1))
         .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
         .readTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
@@ -70,14 +70,14 @@ private fun provideRetrofit(
 private fun provideApiService(retrofit: Retrofit): ApiService =
     retrofit.create(ApiService::class.java)
 
-private fun getHeaderInterceptor(): Interceptor {
-    return Interceptor { chain ->
-        val request =
-            chain.request().newBuilder()
-                .header("authKey", ConfigBuild.AUTH_KEY)
-                .header("authsecret", ConfigBuild.AUTH_SECRET)
-                .build()
-        chain.proceed(request)
-    }
-}
+//private fun getHeaderInterceptor(): Interceptor {
+//    return Interceptor { chain ->
+//        val request =
+//            chain.request().newBuilder()
+//                .header("authKey", ConfigBuild.AUTH_KEY)
+//                .header("authsecret", ConfigBuild.AUTH_SECRET)
+//                .build()
+//        chain.proceed(request)
+//    }
+//}
 
