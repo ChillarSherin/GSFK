@@ -176,13 +176,11 @@ class HomeFragment : Fragment() {
     private fun showLogoutConfirmationDialog(message: String) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(message)
+        builder.setCancelable(false);
         builder.setPositiveButton("Logout") { dialogInterface, _ ->
             dialogInterface.dismiss()
             logout()
 
-        }
-        builder.setNegativeButton("Cancel") { dialogInterface, _ ->
-            dialogInterface.dismiss()
         }
 
         val alertDialog: AlertDialog = builder.create()
@@ -239,7 +237,7 @@ class HomeFragment : Fragment() {
                         Status.LOADING -> {
                         }
                         Status.ERROR -> {
-                            Const.shortToast(requireContext(), "dfgdfgnhjfdkj"+it.message.toString())
+                            Const.shortToast(requireContext(), it.message.toString())
                         }
                     }
                 }

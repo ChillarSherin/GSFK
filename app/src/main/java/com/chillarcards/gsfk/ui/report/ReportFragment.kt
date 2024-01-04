@@ -101,7 +101,7 @@ class ReportFragment : Fragment() {
 
                                 }
                                 else if (qrData.status.code == "401") {
-                                    logout(requireContext(),qrData.status.message_details.toString())
+                                    showLogoutConfirmationDialog(qrData.status.message_details.toString())
 
                                 }
                                 else if(qrData.status.code == "204") {
@@ -139,28 +139,30 @@ class ReportFragment : Fragment() {
     private fun hideProgress() {
         binding.loginProgress.visibility = View.GONE
     }
-    private fun logout(context: Context, value: String) {
-        val builder = AlertDialog.Builder(context)
-        builder.setMessage(value)
-        builder.setNegativeButton(context.getString(R.string.logout)) { dialogInterface, _ ->
-            val prefManager = PrefManager(requireContext())
-            prefManager.clearAll()
-            Const.clearCache(requireContext())
-            prefManager.setIsLoggedIn(false)
+    private fun showLogoutConfirmationDialog(message: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage(message)
+        builder.setCancelable(false);
+        builder.setPositiveButton("Logout") { dialogInterface, _ ->
+            dialogInterface.dismiss()
+            logout()
+        }
 
-            Log.d("abc_home", "showLogoutAlert: recreating activity.. all data cleared")
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            ActivityCompat.finishAffinity(requireActivity())
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
-        }
         val alertDialog: AlertDialog = builder.create()
-        alertDialog.setOnShowListener {
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.primary_red)
-            )
-        }
-        alertDialog.setCanceledOnTouchOutside(false)
         alertDialog.show()
+    }
+
+    private fun logout() {
+
+        prefManager.clearAll()
+        Const.clearCache(requireContext())
+        prefManager.setIsLoggedIn(false)
+
+        Log.d("abc_home", "showLogoutAlert: recreating activity.. all data cleared")
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        ActivityCompat.finishAffinity(requireActivity())
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
     }
 
 }

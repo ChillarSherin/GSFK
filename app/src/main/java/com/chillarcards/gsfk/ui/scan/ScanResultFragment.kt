@@ -1,15 +1,12 @@
 package com.chillarcards.gsfk.ui.scan
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Paint
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -38,6 +35,7 @@ class ScanResultFragment : Fragment(), IAdapterViewUtills {
     private val args: ScanResultFragmentArgs by navArgs()
     private val idList: MutableList<String> = mutableListOf()
     private var idSele: String = ""
+    private lateinit var prefManager: PrefManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +49,7 @@ class ScanResultFragment : Fragment(), IAdapterViewUtills {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolbar()
+        prefManager = PrefManager(requireContext())
 
         scanViewModel.mobileNumber.value = args.mobileNo
         scanViewModel.token.value = args.token
@@ -117,8 +116,15 @@ class ScanResultFragment : Fragment(), IAdapterViewUtills {
                                         Log.d("api_scan_res", "Data list is empty")
                                     }
                                 }
-                                else {
-                                    Log.d("abc_home", "json_$qrData")
+                                else if (qrData.status?.code == "401") {
+                                    showLogoutConfirmationDialog(qrData.status?.message_details.toString())
+                                }
+                                else if (qrData.status?.code == "204") {
+                                    findNavController().popBackStack()
+                                    Const.shortToast(
+                                        requireContext(),qrData.status?.message_details.toString()
+                                    )
+                                }else {
                                     Const.shortToast(
                                         requireContext(),qrData.status?.code.toString()
                                     )
@@ -162,7 +168,7 @@ class ScanResultFragment : Fragment(), IAdapterViewUtills {
                                 else if (qrData.status.code == "400") {
                                     Log.d("abc_home", "json_ abc_home $qrData")
 
-                                    logout(requireContext(),qrData.status.message_details.toString())
+                                    showLogoutConfirmationDialog(qrData.status.message_details.toString())
 
                                 }
                                 else {
@@ -218,28 +224,30 @@ class ScanResultFragment : Fragment(), IAdapterViewUtills {
         return idList.toList()
     }
 
-    private fun logout(context: Context, value: String) {
-        val builder = AlertDialog.Builder(context)
-        builder.setMessage(value)
-        builder.setNegativeButton(context.getString(R.string.logout)) { dialogInterface, _ ->
-            val prefManager = PrefManager(requireContext())
-            prefManager.clearAll()
-            Const.clearCache(requireContext())
-            prefManager.setIsLoggedIn(false)
+    private fun showLogoutConfirmationDialog(message: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage(message)
+        builder.setCancelable(false);
+        builder.setPositiveButton("Logout") { dialogInterface, _ ->
+            dialogInterface.dismiss()
+            logout()
+        }
 
-            Log.d("abc_home", "showLogoutAlert: recreating activity.. all data cleared")
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            ActivityCompat.finishAffinity(requireActivity())
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
-        }
         val alertDialog: AlertDialog = builder.create()
-        alertDialog.setOnShowListener {
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.primary_red)
-            )
-        }
-        alertDialog.setCanceledOnTouchOutside(false)
         alertDialog.show()
+    }
+
+    private fun logout() {
+
+        prefManager.clearAll()
+        Const.clearCache(requireContext())
+        prefManager.setIsLoggedIn(false)
+
+        Log.d("abc_home", "showLogoutAlert: recreating activity.. all data cleared")
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        ActivityCompat.finishAffinity(requireActivity())
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
     }
 
 }

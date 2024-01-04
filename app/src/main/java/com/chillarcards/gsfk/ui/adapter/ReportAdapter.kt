@@ -32,7 +32,12 @@ class ReportAdapter(private val items: List<RDetails>,
         private val eventPack: TextView = itemView.findViewById(R.id.event_pack)
 
         fun bind(item: RDetails) {
-            guestName.text = item.full_name
+            if ( item.full_name == null){
+                guestName.text = item.mobile_number
+            }else{
+                guestName.text = item.full_name +"( "+item.mobile_number+" )"
+            }
+
             eventGuest.text = item.sub_package_count
             eventPack.text = item.sub_package_name
         }

@@ -35,6 +35,7 @@ data class RpData (
     var sub_package_uuid             : String,
     var sub_package_status           : String,
     var sub_package_name             : String,
+    var package_name             : String,
     var max_allowed_Person           : String,
     var min_allowed_Person           : String,
     var age_group_id                 : String,

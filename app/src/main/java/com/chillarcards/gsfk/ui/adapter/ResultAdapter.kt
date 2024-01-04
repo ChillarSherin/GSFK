@@ -39,8 +39,8 @@ class ResultAdapter(
                 notifyDataSetChanged()
 
                 val commonDObj = CommonDBaseModel()
-                commonDObj.mastIDs = item.event_transaction_item_id.toString()
-                commonDObj.itmName = item.sub_package_name
+                commonDObj.mastIDs = item.event_transaction_item_id
+                commonDObj.itmName = item.package_name +" : "+item.sub_package_name
                 commonDObj.valueStr1 = item.sub_package_count
                 val sCommonDAry: ArrayList<CommonDBaseModel> = ArrayList()
                 sCommonDAry.add(commonDObj)
@@ -60,7 +60,7 @@ class ResultAdapter(
         val checkBox: CheckBox = itemView.findViewById(R.id.checkbox)
 
         fun bind(item: RpData) {
-            CustomNameTextView.text = item.sub_package_name
+            CustomNameTextView.text = item.package_name +" : "+item.sub_package_name
             GuestCount.text = item.sub_package_count
             if (item.event_transaction_item_status.toInt() == 1) {
                 PayStatus.visibility = View.VISIBLE

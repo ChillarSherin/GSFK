@@ -19,3 +19,25 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# OkHttp
+-dontwarn okhttp3.**
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okio.**
+-keep class okio.** { *; }
+
+# Retrofit
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+-dontwarn retrofit2.**
+
+# GSON
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn sun.misc.**
+-keep class com.google.gson.examples.android.** { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * extends com.google.gson.TypeAdapter
+-keepclassmembers enum * { *; }
+-keepclassmembers @interface * { *; }
